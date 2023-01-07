@@ -12,6 +12,19 @@ namespace DataAccess.EFCore.Repositories
     {
         public EditHistoryRepository(ApplicationContext context) : base(context)
         {
+      
+        }
+
+        public async Task AddEditAsync(int Id)
+        {
+            EditHistory hist = new EditHistory();
+            hist.ContactId = Id;
+            hist.ModifiedDate = DateTime.Now;
+            await _context.EditHistories.AddAsync(hist);
+        }
+        public IEnumerable<EditHistory> GetHistory(int Id)
+        {
+            return _context.EditHistories.Where(d => d.ContactId == Id).ToList();
         }
     }
 }

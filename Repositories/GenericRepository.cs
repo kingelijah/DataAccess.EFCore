@@ -18,19 +18,23 @@ namespace DataAccess.EFCore.Repositories
             _context = context;
         }
        
-        public async Task UpdateAsync(T entity) => _context.Set<T>().Update(entity);
+        public void Update(T entity) => _context.Set<T>().Update(entity);
       
         public async Task AddAsync(T entity) => await _context.Set<T>().AddAsync(entity);
-       
 
-        public async Task<IQueryable<T>> FindAsync(Expression<Func<T, bool>> expression) => _context.Set<T>().Where(expression).AsNoTracking();
+        public IQueryable<T> Find(Expression<Func<T, bool>> expression) => _context.Set<T>().Where(expression).AsNoTracking();
        
-        public async Task<IEnumerable<T>> GetAllAsync() => _context.Set<T>().ToList();
+        public IEnumerable<T> GetAll() => _context.Set<T>().ToList();
 
         public async Task<T> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
       
 
-        public async Task RemoveAsync(T entity) => _context.Set<T>().Remove(entity);       
+        public void Remove(T entity)
+        {
+            if (entity == null)
+                return;
+            _context.Set<T>().Remove(entity);
+        }       
 
 
     }
